@@ -97,14 +97,14 @@ const styles = `
 }
 
   .brand-name {
-    font-size: 100px;
+    font-size: 80px;
     font-weight: 600;
     color: var(--text-dark);
     letter-spacing: -0.3px;
   }
 
   .brand-sub {
-  font-size: 28px;
+  font-size: 23px;
   font-weight: 400;
   color: var(--text-mid);
   letter-spacing: 0.1px;
