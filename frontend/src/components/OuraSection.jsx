@@ -31,6 +31,7 @@ export default function OuraSection({ token }) {
   useEffect(() => {
     if (!token) return
 
+    // get activity data 
     fetch('http://localhost:8000/oura/activity', {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -41,6 +42,7 @@ export default function OuraSection({ token }) {
       })
       .catch(() => setLoadingActivity(false))
 
+    // get readiness data
     fetch('http://localhost:8000/oura/readiness', {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -51,6 +53,7 @@ export default function OuraSection({ token }) {
       })
       .catch(() => setReadinessData(false))
 
+    // get sleep data
     fetch('http://localhost:8000/oura/sleep', {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -68,6 +71,8 @@ export default function OuraSection({ token }) {
       <style>{styles}</style>
       <div className="oura-section">
         <div className="oura-plots-row">
+
+          {/* acitivty trend plot */}
           <TrendPlot
             title="activity"
             data={activityData}
@@ -76,6 +81,8 @@ export default function OuraSection({ token }) {
             gradientId="ouraActivity"
             exclude={EXCLUDE}
           />
+
+          {/* readiness trend plot */}
           <TrendPlot
             title="readiness"
             data={readinessData}
@@ -84,6 +91,8 @@ export default function OuraSection({ token }) {
             gradientId="ouraReadiness"
             exclude={EXCLUDE}
           />
+
+          {/* sleep trend plot */}
           <TrendPlot
             title="sleep"
             data={sleepData}

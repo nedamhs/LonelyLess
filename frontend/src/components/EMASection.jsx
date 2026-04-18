@@ -24,6 +24,7 @@ export default function EMASection({ token }) {
   useEffect(() => {
     if (!token) return
  
+    // get daily ema data 
     fetch('http://localhost:8000/ema/daily', {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -34,6 +35,7 @@ export default function EMASection({ token }) {
       })
       .catch(() => setLoadingDaily(false))
  
+    // get weekly ema data 
     fetch('http://localhost:8000/ema/weekly', {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -51,6 +53,7 @@ export default function EMASection({ token }) {
       <style>{styles}</style>
       <div className="ema-section">
         <div className="ema-plots-row">
+          {/* daily ema trend plot */}
           <TrendPlot
             title="daily EMA"
             data={dailyData}
@@ -59,6 +62,8 @@ export default function EMASection({ token }) {
             gradientId="emaDaily"
             exclude={EXCLUDE}
           />
+
+          {/* weekly ema trend plot */}
           <TrendPlot
             title="weekly EMA"
             data={weeklyData}

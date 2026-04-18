@@ -31,6 +31,7 @@ export default function HRVSection({ token }) {
   useEffect(() => {
     if (!token) return
 
+    // get hrv 5 min data 
     fetch('http://localhost:8000/hrv/5min', {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -42,6 +43,7 @@ export default function HRVSection({ token }) {
       })
       .catch(() => setLoading5min(false))
 
+    // get hrv 12 min data 
     fetch('http://localhost:8000/hrv/12min', {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -60,6 +62,8 @@ export default function HRVSection({ token }) {
       <style>{styles}</style>
       <div className="hrv-section">
         <div className="hrv-plots-row">
+
+          {/* hrv 5 min trend plot */}
           <TrendPlot
             title="HRV — 5 min"
             data={data5min}
@@ -68,6 +72,8 @@ export default function HRVSection({ token }) {
             gradientId="hrv5min"
             exclude={EXCLUDE}
           />
+
+          {/* hrv 12 min trend plot */}
           <TrendPlot
             title="HRV — 12 min"
             data={data12min}

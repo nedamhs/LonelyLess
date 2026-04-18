@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 
-
- 
 const styles = `
   .trend-plot-card {
     flex: 1;
@@ -73,6 +71,7 @@ const styles = `
   }
 `
  
+//  renders the popup box that appears when hover over a data point on the chart
 function CustomTooltip({ active, payload, label, feature, color }) {
   if (!active || !payload?.length) return null
   return (
@@ -83,59 +82,68 @@ function CustomTooltip({ active, payload, label, feature, color }) {
   )
 }
  
+//  picks 3 dates (first, middle, last) to show as labels on the x-axis
 function pickTicks(dates) {
   if (!dates.length) return []
   const mid = Math.floor((dates.length - 1) / 2)
   return [dates[0], dates[mid], dates[dates.length - 1]]
 }
  
+// converts a raw date string into a human-readable format 
 function formatDate(d) {
   if (!d) return ''
   const dt = new Date(d)
   return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
  
+
 export default function TrendPlot({ title, data, loading, color, gradientId, exclude = [], extraDropdown = null }) {
   console.log('extraDropdown:', extraDropdown)
-  const excludeSet = new Set(exclude)
+  const excludeSet = new Set(exclude)   // cols to exclude 
  
+  // extract plottable column names from the first data row, excluding unnecessary cols.
   const features = data.length
     ? Object.keys(data[0]).filter(k => !excludeSet.has(k))
     : []
  
   const [selected, setSelected] = useState('')
  
+  // sets the first feature as default when data loads
   useEffect(() => {
     if (features.length && !selected) setSelected(features[0])
   }, [features.length])
  
   const chartData = data
-    .filter(row => row[selected] !== null && row[selected] !== undefined)
-    .map(row => ({ date: row.date, value: parseFloat(row[selected]) }))
+    .filter(row => row[selected] !== null && row[selected] !== undefined)  //remove null rows 
+    .map(row => ({ date: row.date, value: parseFloat(row[selected]) }))    // reshapes data into { date, value } pairs for Recharts
  
-  const dates = chartData.map(d => d.date)
-  const ticks = pickTicks(dates)
+  const dates = chartData.map(d => d.date)   // convert date 
+  const ticks = pickTicks(dates)   // pick x ticks for plots
  
   return (
     <>
       <style>{styles}</style>
+
+      {/* plot card */}
       <div className="trend-plot-card">
-        <div className="trend-plot-header">
-            <span className="trend-plot-title">{title}</span>
-            {extraDropdown}
-            {features.length > 0 && (
-              <select
-                className="trend-select"
-                value={selected}
-                onChange={e => setSelected(e.target.value)}
-              >
-                {features.map(f => (
-                  <option key={f} value={f}>{f}</option>
-                ))}
-              </select>
-            )}
+            {/* header: title + optional category dropdown + feature dropdown */}
+            <div className="trend-plot-header">
+                <span className="trend-plot-title">{title}</span>
+                {extraDropdown}
+                {features.length > 0 && (
+                  <select
+                    className="trend-select"
+                    value={selected}
+                    onChange={e => setSelected(e.target.value)}
+                  >
+                    {features.map(f => (
+                      <option key={f} value={f}>{f}</option>
+                    ))}
+                  </select>
+                )}
       </div>
- 
+        
+        {/* show loading, no data, or the chart */}
         {loading ? (
           <div className="trend-loading">loading...</div>
         ) : chartData.length === 0 ? (
@@ -144,13 +152,16 @@ export default function TrendPlot({ title, data, loading, color, gradientId, exc
           <div className="trend-chart-wrap">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData} margin={{ top: 6, right: 8, left: 8, bottom: 0 }}>
+               {/* gradient fill under the line */}
                 <defs>
                   <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor={color} stopOpacity={0.25} />
                     <stop offset="95%" stopColor={color} stopOpacity={0} />
                   </linearGradient>
                 </defs>
+                {/* horizontal grid lines */}
                 <CartesianGrid vertical={false} stroke="rgba(155,132,204,0.12)" />
+                {/* x-axis: 3 date ticks */}
                 <XAxis
                   dataKey="date"
                   ticks={ticks}
@@ -159,13 +170,16 @@ export default function TrendPlot({ title, data, loading, color, gradientId, exc
                   axisLine={false}
                   tickLine={false}
                 />
+                 {/* y-axis: values */}
                 <YAxis
                   tick={{ fontSize: 10, fill: '#a89cc8', fontFamily: 'DM Sans' }}
                   axisLine={false}
                   tickLine={false}
                   width={28}
                 />
+                 {/* hover tooltip */}
                 <Tooltip content={<CustomTooltip feature={selected} color={color} />} />
+                {/* line + gradient fill */}
                 <Area
                   type="monotone"
                   dataKey="value"

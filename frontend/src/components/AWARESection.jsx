@@ -68,8 +68,7 @@ const styles = `
   }
 `
 
-
-
+// add date col 
 function addDateCol(data) {
   return data.map(row => ({
     ...row,
@@ -83,7 +82,7 @@ export default function AWARESection({ token }) {
   const [selectedCategory, setSelectedCategory] = useState('calls')
   const [allFeatures, setAllFeatures] = useState([])
 
-
+  // get aware feuturees 
   useEffect(() => {
     if (!token) return
     fetch('http://localhost:8000/aware/features', {
@@ -102,6 +101,7 @@ export default function AWARESection({ token }) {
       .catch(() => setLoading(false))
   }, [token])
 
+  // chose which aare modality to look at (call, notif, message, etc. )
   const categoryDropdown = (
     <select
       className="trend-select"
@@ -118,6 +118,7 @@ export default function AWARESection({ token }) {
     <>
       <style>{styles}</style>
       <div className="aware-section">
+        {/* trend plot for aware feutures */}
         <TrendPlot
                 title="phone features"
                 data={data}
