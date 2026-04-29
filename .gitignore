@@ -1,4 +1,9 @@
 backend/.env
 backend/venv/
+backend/init_db.py
+backend/models.py
+
 *.pyc
 Demo-M1.gif
+Demo-M2.gif
+

@@ -1,13 +1,11 @@
-# LonelyLess — A Mental Health Monitoring Platform
+# LonelyLess — Personalized Longitudinal Health Monitoring Dashboard
 
-A full-stack mental health monitoring platform with JWT authentication, for 31 college students to view their historical multimodal data through a personalized dashboard — including Self reported surveys (EMA), Oura Ring biometrics, HRV features extracted from Samsung watch, and behavioral phone data captured via the AWARE framework. 
+A full-stack health analytics platform with JWT authentication for secure participant-level access to historical multimodal wearable, behavioral, and survey data through an interactive dashboard.
 
 ## Demo
 <img src='Demo.gif' width='' alt='Video Walkthrough' />
 
-## Data
-Loneliness dataset from the Institute for Future Health (IFH), UC Irvine.
 
 ## Tech Stack
 **Frontend** — React, Recharts  
-**Backend** — FastAPI, PostgreSQL
+**Backend** — FastAPI, PostgreSQL, SQLAlchemy
